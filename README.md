@@ -14,7 +14,13 @@ Server listens on `http://localhost:8080` by default. Set `PORT` to use another 
 
 ```bash
 docker build -t phasher .
-docker run -p 8080:8080 phasher
+docker run --rm -p 8080:8080 phasher
+```
+
+or
+
+```bash
+docker run --rm -p 8080:8080 ghcr.io/yoshi-content-manager/standalone-phasher:main
 ```
 
 ## API

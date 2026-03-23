@@ -65,16 +65,30 @@ func handlePhash(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hash, err := goimagehash.PerceptionHash(img)
+	phash, err := goimagehash.PerceptionHash(img)
 	if err != nil {
 		writeJSONError(w, "failed to compute phash: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ahash, err := goimagehash.AverageHash(img)
+	if err != nil {
+		writeJSONError(w, "failed to compute ahash: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	dhash, err := goimagehash.DifferenceHash(img)
+	if err != nil {
+		writeJSONError(w, "failed to compute dhash: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"phash": hash.ToString(),
-		"hash":  hash.GetHash(),
+		"phash":  phash.ToString(),
+		"hash":   phash.GetHash(),
+		"ahash":  ahash.ToString(),
+		"a_hash": ahash.GetHash(),
+		"dhash":  dhash.ToString(),
+		"d_hash": dhash.GetHash(),
 	})
 }
 
